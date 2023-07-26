@@ -15,6 +15,7 @@ class Classroom
 
   def remove_student(student)
     return unless student.classroom == self
+
     student.classroom = nil
     @students.delete(student)
   end
