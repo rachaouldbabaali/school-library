@@ -2,7 +2,6 @@ require_relative 'rental'
 require_relative 'book'
 require_relative 'person'
 
-# The RentalCreator class is responsible for creating new Rental objects.
 class RentalCreator
   def initialize(books, people, rentals)
     @books = books
