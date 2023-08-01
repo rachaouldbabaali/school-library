@@ -8,7 +8,7 @@ def main
 
   loop do
     menu.display
-    selection = menu.get_selection
+    selection = menu.selection
     operations.execute_option(selection)
     puts "\n"
   end
