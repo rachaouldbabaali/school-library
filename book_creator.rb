@@ -1,3 +1,4 @@
+require 'json'
 require_relative 'book'
 
 class BookCreator
@@ -12,6 +13,7 @@ class BookCreator
     return if book_already_exists(title, author)
 
     book = create_new_book(title, author)
+    save_books_to_json
     puts "Created book '#{book.title}' by #{book.author}."
   rescue ArgumentError => e
     puts "Error: #{e.message}"
@@ -40,5 +42,11 @@ class BookCreator
     book = Book.new(title, author)
     @books << book
     book
+  end
+
+  def save_books_to_json
+    File.open('books.json', 'w') do |f|
+      f.write(JSON.pretty_generate(@books))
+    end
   end
 end

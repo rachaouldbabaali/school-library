@@ -1,3 +1,4 @@
+require 'json'
 require_relative 'book'
 require_relative 'person'
 require_relative 'teacher'
@@ -18,12 +19,9 @@ class App
 
   def list_books
     puts 'All books:'
-    if @books.empty?
-      puts 'No books available.'
-    else
-      @books.each do |book|
-        puts "Title:\"#{book.title}\", Author:#{book.author}"
-      end
+    load_books_from_json_file('books.json') if @books.empty?
+    @books.each do |book|
+      puts "Title: #{book.title}, Author: #{book.author}"
     end
   end
 
@@ -100,4 +98,17 @@ class App
       puts "Date: #{rental.date}, Book \"#{rental.book.title}\" by #{rental.book.author}"
     end
   end
+
+  def load_books_from_json_file(file_path)
+
+    json_data = File.read(file_path)
+    books_data = JSON.parse(json_data)
+  
+    @books = books_data.map { |data| Book.new(data['title'], data['author']) }
+  
+    puts "Books loaded from #{file_path}."
+  rescue => e
+    puts "Error loading books: #{e.message}"
+  end
+
 end
