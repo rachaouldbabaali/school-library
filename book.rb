@@ -7,15 +7,15 @@ class Book
     @rentals = []
   end
 
-  def to_json(*_args)
+  def to_json(*args)
     {
       'title' => @title,
       'author' => @author
-    }.to_json(*_args)
+    }.to_json(*args)
   end
 
-  def self.json_create(object)
-    new(json["title"], json['author'])
+  def self.json_create(_object)
+    new(json['title'], json['author'])
   end
 
   def add_rental(date, person)

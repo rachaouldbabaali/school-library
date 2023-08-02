@@ -13,15 +13,15 @@ class Person < Nameable
     @rentals = []
   end
 
-  def to_json(*_args)
-    if self.class == Student
+  def to_json(*args)
+    if instance_of?(Student)
       {
         'person_type' => 'Student',
         'id' => @id,
         'name' => @name,
         'age' => @age,
-        'parent_permission' => @parent_permission,
-      }.to_json(*_args)
+        'parent_permission' => @parent_permission
+      }.to_json(*args)
     else
       {
         'person_type' => 'Teacher',
@@ -33,7 +33,7 @@ class Person < Nameable
     end
   end
 
-  def self.json_create(object)
+  def self.json_create(_object)
     new(json['id'], json['name'], json['age'], parent_permission: json['parent_permission'])
   end
 

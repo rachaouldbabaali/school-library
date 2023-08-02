@@ -70,6 +70,6 @@ class PersonCreator
   end
 
   def save_people_to_json
-    File.open('people.json', 'w') { |f| f.write(JSON.pretty_generate(@people)) }
+    File.write('people.json', JSON.pretty_generate(@people))
   end
 end

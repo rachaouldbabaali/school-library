@@ -1,3 +1,4 @@
+require 'json'
 require_relative 'rental'
 require_relative 'book'
 require_relative 'person'
@@ -20,6 +21,7 @@ class RentalCreator
     create_new_rental(rental_date, book, person)
     puts "Created rental for '#{book.title}' by #{book.author} " \
          "on #{rental_date}, for #{person.name} (id: #{person.id})."
+    save_rentals_to_json
   rescue ArgumentError => e
     puts "Error: #{e.message}"
   end
@@ -71,5 +73,9 @@ class RentalCreator
     rental = Rental.new(rental_date, book, person)
     @rentals << rental
     rental
+  end
+
+  def save_rentals_to_json
+    File.write('rentals.json', JSON.pretty_generate(@rentals))
   end
 end

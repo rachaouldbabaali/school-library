@@ -8,4 +8,16 @@ class Rental
     @book.rentals << self
     @person.rentals << self
   end
+
+  def to_json(*args)
+    {
+      'date' => @date,
+      'book' => @book,
+      'person' => @person
+    }.to_json(*args)
+  end
+
+  def self.json_create(_object)
+    new(json['date'], json['book'], json['person'])
+  end
 end

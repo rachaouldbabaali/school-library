@@ -45,8 +45,6 @@ class BookCreator
   end
 
   def save_books_to_json
-    File.open('books.json', 'w') do |f|
-      f.write(JSON.pretty_generate(@books))
-    end
+    File.write('books.json', JSON.pretty_generate(@books))
   end
 end
