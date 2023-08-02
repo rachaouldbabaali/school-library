@@ -25,15 +25,15 @@ class App
     end
   end
 
-  def list_people
-    if @people.empty?
-      puts 'No people available.'
-      return
-    end
-
+  def list_people 
     puts 'All people:'
+    load_people_from_json_file('people.json') if @people.empty?
     @people.each do |person|
-      puts "[#{person.class.name}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
+      if person.is_a?(Student)
+        puts "[Student] Name: #{person.name}, Age: #{person.age}, Parent Permission: #{person.parent_permission}"
+      else
+        puts "[Teacher] Name: #{person.name}, Age: #{person.age}, Specialization: #{person.specialization}"
+      end
     end
   end
 
@@ -109,6 +109,24 @@ class App
     puts "Books loaded from #{file_path}."
   rescue => e
     puts "Error loading books: #{e.message}"
+  end
+
+  def load_people_from_json_file(file_path)
+      
+      json_data = File.read(file_path)
+      people_data = JSON.parse(json_data)
+    
+      @people = people_data.map do |data|
+        if data['person_type'] == 'Student'
+          Student.new(data['name'], data['age'], parent_permission: data['parent_permission'])
+        else
+          Teacher.new(data['name'], data['age'], data['specialization'])
+        end
+      end
+    
+      puts "People loaded from #{file_path}."
+  rescue => e
+    puts "Error loading people: #{e.message}"
   end
 
 end

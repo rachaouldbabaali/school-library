@@ -1,6 +1,7 @@
 require_relative 'person'
 require_relative 'student'
 require_relative 'classroom'
+require 'json'
 
 class PersonCreator
   def initialize(people)
@@ -15,6 +16,7 @@ class PersonCreator
 
     student = create_new_student(name, age, parent_permission, classroom_label)
     puts "Created student #{student.name} with id #{student.id}."
+    save_people_to_json
   rescue ArgumentError => e
     puts "Error: #{e.message}"
   end
@@ -49,9 +51,9 @@ class PersonCreator
     name = read_person_name_from_user_input('Teacher')
     age = read_person_age_from_user_input
     specialization = read_teacher_specialization_from_user_input
-
     teacher = create_new_teacher(name, age, specialization)
     puts "Created teacher #{teacher.name} with id #{teacher.id}."
+    save_people_to_json
   rescue ArgumentError => e
     puts "Error: #{e.message}"
   end
@@ -65,5 +67,9 @@ class PersonCreator
     teacher = Teacher.new(name, age, specialization)
     @people << teacher
     teacher
+  end
+
+  def save_people_to_json
+    File.open('people.json', 'w') { |f| f.write(JSON.pretty_generate(@people)) }
   end
 end
