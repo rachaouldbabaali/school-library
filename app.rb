@@ -48,15 +48,54 @@ class App
     end
   end
 
+  # def create_person
+  #   puts 'Do you want to create a Student (1) or Teacher (2)? [Input the number]:'
+  #   choice = gets.chomp.to_i
+  #   person_creator = PersonCreator.new(@people)
+  #   case choice
+  #   when 1
+  #     person_creator.create_student
+  #   when 2
+  #     person_creator.create_teacher
+  #   end
+  # end
   def create_person
     puts 'Do you want to create a Student (1) or Teacher (2)? [Input the number]:'
     choice = gets.chomp.to_i
     person_creator = PersonCreator.new(@people)
     case choice
     when 1
-      person_creator.create_student
+      person = person_creator.create_student
     when 2
-      person_creator.create_teacher
+      person = person_creator.create_teacher
+    end
+    existing_person = find_person_by_name_and_age(person.name, person.age)
+    if existing_person
+      puts "Person '#{person.name}' already exists with ID #{existing_person.id}."
+      person.id = existing_person.id
+    else
+      @people << person
+    end
+    save_people_to_json
+  end
+  
+  def find_person_by_name_and_age(name, age)
+    @people.find { |p| p.name == name && p.age == age }
+  end
+  
+  def save_people_to_json
+    File.open('people.json', 'w') do |file|
+      json_data = @people.map do |person|
+        {
+          'name' => person.name,
+          'age' => person.age,
+          'id' => person.id,
+          'person_type' => person.class.name,
+          'parent_permission' => person.parent_permission,
+          'specialization' => person.specialization
+        }
+      end
+      file.write(JSON.pretty_generate(json_data))
     end
   end
 
@@ -68,23 +107,6 @@ class App
   def create_rental
     rental_creator = RentalCreator.new(@books, @people, @rentals)
     rental_creator.create_rental
-  end
-
-  def list_rentals_by_person_id
-    person_id = read_person_id_from_user_input
-    load_rentals_from_json_file('rentals.json') if @rentals.empty?
-    person = find_person_by_id(person_id)
-
-    return unless person
-
-    rentals = get_rentals_by_person(person)
-
-    if rentals.empty?
-      puts "#{person.name} (id: #{person.id}) has no rentals."
-    else
-      puts "All rentals for #{person.name} (id: #{person.id}):"
-      print_rentals(rentals)
-    end
   end
 
   def read_person_id_from_user_input
@@ -139,17 +161,38 @@ class App
     puts "Error loading people: #{e.message}"
   end
 
+  def list_rentals_by_person_id
+    load_rentals_from_json_file('rentals.json') if @rentals.empty?
+    if @rentals.empty?
+      puts 'No rentals available.'
+      return
+    end
+  
+    person_id = read_person_id_from_user_input
+    return if person_id.nil?
+  
+    puts "Rentals for person with id #{person_id}:"
+  
+    @rentals.each do |rental|
+      puts "Checking rental: #{rental.date}, Book: #{rental.book.title}, Author: #{rental.book.author}, Person ID: #{rental.person.id}"
+      if rental.person.id == person_id
+        puts "Date: #{rental.date}, Book: #{rental.book.title}, Author: #{rental.book.author}"
+      end
+    end
+  end
+
   def load_rentals_from_json_file(file_path)
     json_data = File.read(file_path)
     rentals_data = JSON.parse(json_data)
 
     @rentals = rentals_data.map do |data|
-      person_id = data['person_id']
-      book_id = data['book_id']
-      date = Date.parse(data['date'])
-      person = find_person_by_id(person_id)
-      book = find_book_by_id(book_id)
-      Rental.new(person, book, date)
+      book = Book.new(data['book']['title'], data['book']['author'])
+      person = if data['person']['person_type'] == 'Student'
+                 Student.new(data['person']['name'], data['person']['age'], parent_permission: data['person']['parent_permission'])
+               else
+                 Teacher.new(data['person']['name'], data['person']['age'], data['person']['specialization'])
+               end
+      Rental.new(data['date'], book, person)
     end
 
     puts "Rentals loaded from #{file_path}."

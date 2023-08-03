@@ -1,0 +1,9 @@
+[
+  {
+    "person_type": "Student",
+    "id": 33,
+    "name": "racha",
+    "age": 26,
+    "parent_permission": true
+  }
+]

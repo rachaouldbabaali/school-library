@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2020-06-09",
+    "book": {
+      "title": "life",
+      "author": "reko"
+    },
+    "person": {
+      "person_type": "Student",
+      "id": 947,
+      "name": "racha",
+      "age": 26,
+      "parent_permission": true
+    }
+  }
+]

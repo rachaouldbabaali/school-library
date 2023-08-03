@@ -11,6 +11,7 @@ class RentalCreator
   end
 
   def create_rental
+
     book = select_book_from_list
     return unless book
 
@@ -28,6 +29,7 @@ class RentalCreator
 
   def select_book_from_list
     puts 'Available books:'
+    load_books_from_json_file('books.json') if @books.empty?
     @books.each_with_index do |book, index|
       puts "#{index}) Title:\"#{book.title}\", Author:#{book.author}"
     end
@@ -44,6 +46,7 @@ class RentalCreator
 
   def display_people_list
     puts 'Available people:'
+    load_people_from_json_file('people.json') if @people.empty?
     @people.each_with_index do |person, index|
       display_person_info(person, index)
     end
@@ -78,4 +81,35 @@ class RentalCreator
   def save_rentals_to_json
     File.write('rentals.json', JSON.pretty_generate(@rentals))
   end
+
+  def load_books_from_json_file(file_path)
+    json_data = File.read(file_path)
+    books_data = JSON.parse(json_data)
+
+    @books = books_data.map { |data| Book.new(data['title'], data['author']) }
+
+    puts "Books loaded from #{file_path}."
+  rescue StandardError => e
+    puts "Error loading books: #{e.message}"
+  end
+
+  def load_people_from_json_file(file_path)
+    json_data = File.read(file_path)
+    people_data = JSON.parse(json_data)
+
+    @people = people_data.map do |data|
+      if data['person_type'] == 'Student'
+        Student.new(data['name'], data['age'], parent_permission: data['parent_permission'])
+      else
+        Teacher.new(data['name'], data['age'], data['specialization'])
+      end
+    end
+
+    puts "People loaded from #{file_path}."
+  rescue StandardError => e
+    puts "Error loading people: #{e.message}"
+  end
+
+
+
 end
