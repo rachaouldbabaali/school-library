@@ -29,7 +29,7 @@ class Person < Nameable
         'name' => @name,
         'age' => @age,
         'specialization' => @specialization
-      }.to_json(*_args)
+      }.to_json(*args)
     end
   end
 

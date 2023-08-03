@@ -48,54 +48,15 @@ class App
     end
   end
 
-  # def create_person
-  #   puts 'Do you want to create a Student (1) or Teacher (2)? [Input the number]:'
-  #   choice = gets.chomp.to_i
-  #   person_creator = PersonCreator.new(@people)
-  #   case choice
-  #   when 1
-  #     person_creator.create_student
-  #   when 2
-  #     person_creator.create_teacher
-  #   end
-  # end
   def create_person
     puts 'Do you want to create a Student (1) or Teacher (2)? [Input the number]:'
     choice = gets.chomp.to_i
     person_creator = PersonCreator.new(@people)
     case choice
     when 1
-      person = person_creator.create_student
+      person_creator.create_student
     when 2
-      person = person_creator.create_teacher
-    end
-    existing_person = find_person_by_name_and_age(person.name, person.age)
-    if existing_person
-      puts "Person '#{person.name}' already exists with ID #{existing_person.id}."
-      person.id = existing_person.id
-    else
-      @people << person
-    end
-    save_people_to_json
-  end
-  
-  def find_person_by_name_and_age(name, age)
-    @people.find { |p| p.name == name && p.age == age }
-  end
-  
-  def save_people_to_json
-    File.open('people.json', 'w') do |file|
-      json_data = @people.map do |person|
-        {
-          'name' => person.name,
-          'age' => person.age,
-          'id' => person.id,
-          'person_type' => person.class.name,
-          'parent_permission' => person.parent_permission,
-          'specialization' => person.specialization
-        }
-      end
-      file.write(JSON.pretty_generate(json_data))
+      person_creator.create_teacher
     end
   end
 
