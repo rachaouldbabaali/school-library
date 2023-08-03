@@ -1,3 +1,1 @@
-def read_books(file_path)
-
-end
+def read_books(file_path); end
