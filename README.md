@@ -83,7 +83,7 @@ Go to the project directory.
 ### Test
 
 ``` test
-No tests here...
+rspec ./tests
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
