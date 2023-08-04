@@ -4,6 +4,7 @@ class Student < Person
   attr_reader :classroom
   attr_accessor :id
 
+
   def initialize(age, classroom, **defaults)
     @id = rand(30..5000)
     defaults[:name] ||= 'Unknown'
@@ -31,4 +32,5 @@ class Student < Person
       classroom: @classroom
     }
   end
+
 end
