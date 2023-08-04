@@ -1,9 +1,7 @@
 require_relative 'rental'
 class RentalLister
-  def initialize(rentals, people, books)
+  def initialize(rentals)
     @rentals = rentals
-    @people = people
-    @books = books
   end
 
   def list_all_rentals
