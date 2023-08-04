@@ -1,4 +1,3 @@
-require 'pry'
 require './classes/person'
 
 class Teacher < Person
