@@ -99,6 +99,10 @@ No tests here...
 - GitHub: [@racha](https://github.com/rachaouldbabaali)
 - LinkedIn: [LinkedIn](https://www.linkedin.com/in/rachaouldbabaali)
 
+👤 **Wael Elsafty**
+
+- GitHub: [@waelelsafty07](https://github.com/waelelsafty07)
+- LinkedIn: [LinkedIn](https://www.linkedin.com/in/waelelsafty07)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
