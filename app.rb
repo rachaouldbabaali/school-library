@@ -43,6 +43,11 @@ class App
       @menu.print
       choice = gets.chomp.downcase
       break unless @io.handle_choice(choice)
+  def start
+    loop do
+      @menu.print
+      choice = gets.chomp.downcase
+      break unless @io.handle_choice(choice)
 
       puts "\n"
     end
