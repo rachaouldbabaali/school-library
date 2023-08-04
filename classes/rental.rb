@@ -8,7 +8,7 @@ class Rental
     book.rentals << self
     person.rentals << self
   end
-  
+
   def to_h
     {
       date: @date,
@@ -16,5 +16,4 @@ class Rental
       person: @person.to_h
     }
   end
-  
 end

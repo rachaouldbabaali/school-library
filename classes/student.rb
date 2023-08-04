@@ -32,5 +32,4 @@ class Student < Person
       classroom: @classroom
     }
   end
-
 end
